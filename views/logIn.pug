@@ -1,0 +1,26 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title #{title}
+    body 
+        h1 #{title}
+        div 
+            form(action="/log-in" method="POST")
+                fieldset 
+                    label(for="username") Email
+                    input(type="text", name="username", placeholder="Email")
+                fieldset
+                    label(for="password") Password
+                    input(type="password", name="password", placeholder="Password")
+                input(type="submit", value="Log In")
+        if message
+            error #{message}
+        if user
+            p #{user.username}
+        if errors
+            ul
+                for error in errors
+                    li!= error.msg
