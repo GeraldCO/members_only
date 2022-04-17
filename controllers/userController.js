@@ -27,47 +27,47 @@ exports.user_create_post =[
 
         //create a user object with escaped and trimmed data.
 
-    const hashedPassword = await new Promise((resolve, reject) => {
-        bcrypt.hash(req.body.password, 10, function(err, hash) {
-            if (err) reject(err);
-            resolve(hash);
-        });
-    });
-    
-    var user = new User({
-        name: req.body.name,
-        lastname: req.body.lastname,
-        username: req.body.username,
-        password: hashedPassword
-    });
-    
-    if(!errors.isEmpty()){
-        //there are arrors. Render the form again with sanitized values/ errors messages
-        res.render('signUp', { 
-            title: 'Sign up',
-            user: user,
-            errors: errors.array()
-        });
-    } else{
-        //Data from form is valid
-        //check if User with same username already exists.
-        User.findOne({ 'username': req.body.username })
-            .exec( function(err, found_user){
-                if(err) { return next(err); }
-
-                if(found_user){
-                    //User exists, send error message
-                    res.render('signUp', {
-                        title: 'Sign up',
-                        message: 'User already exists'
-                    })
-                }else{
-                    user.save(function(err){
-                        if(err) return next(err);
-                    })
-                    res.redirect("/");
-                }
+        const hashedPassword = await new Promise((resolve, reject) => {
+            bcrypt.hash(req.body.password, 10, function(err, hash) {
+                if (err) reject(err);
+                resolve(hash);
             });
-    }    
+        });
+    
+        var user = new User({
+            name: req.body.name,
+            lastname: req.body.lastname,
+            username: req.body.username,
+            password: hashedPassword
+        });
+    
+        if(!errors.isEmpty()){
+            //there are arrors. Render the form again with sanitized values/ errors messages
+            res.render('signUp', { 
+                title: 'Sign up',
+                user: user,
+                errors: errors.array()
+            });
+        } else{
+            //Data from form is valid
+            //check if User with same username already exists.
+            User.findOne({ 'username': req.body.username })
+                .exec( function(err, found_user){
+                    if(err) { return next(err); }
+
+                    if(found_user){
+                        //User exists, send error message
+                        res.render('signUp', {
+                            title: 'Sign up',
+                            message: 'User already exists'
+                        })
+                    }else{
+                        user.save(function(err){
+                            if(err) return next(err);
+                        })
+                        res.redirect("/");
+                    }
+                });
+        }    
   }
 ];

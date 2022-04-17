@@ -3,23 +3,28 @@ const { route } = require('../app');
 var router = express.Router();
 var userController = require("../controllers/userController");
 var authController = require("../controllers/authController");
+var messageController = require("../controllers/messageController");
+
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { 
-    title: 'Express',
-    user: req.user
-   });
-});
+router.get('/', messageController.index);
 
-
-router.get('/success', (req, res)=>{
-  console.log(req.user);
-})
 //authentication routes
 router.get('/log-in', authController.auth_get);
 router.post('/log-in', authController.auth_post);
 
+//log-out
+router.get('/log-out', (req, res)=>{
+  req.logout();
+  res.redirect('/');
+
+});
+
+//messages routes
+router.get('/create-message', messageController.createMessageGet);
+router.post('/create-message', messageController.createMessagePost);
+
+//main route
 router.get('/', function(req, res, next){
   res.render('signUp' , { title: "Sign Up"});
 });

@@ -1,8 +1,17 @@
 extends layout
 
 block content
-  if (user)
-    p #{user.lastname}
   h1= title
   p Welcome to #{title}
-
+  div.container
+    each message in allMessages
+      div.card
+        div.card-header Featured
+        div.card-body
+          h5.card-title #{message.title}
+          p.card-text #{message.message}
+          p.text-end 
+            if(user)
+              by #{user.name} #{user.lastname}
+            else
+              by unknown
